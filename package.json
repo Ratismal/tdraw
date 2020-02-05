@@ -1,6 +1,6 @@
 {
   "name": "tdraw",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "author": "stupid cat (cat@blargbot.xyz)",
   "description": "A transparent drawing application that's 100% better than ZTD's memos",

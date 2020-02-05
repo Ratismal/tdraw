@@ -27,7 +27,8 @@ export default {
       locked: false,
       tool: Tools.BRUSH,
       color: Colors.RED,
-      size: Sizes.MEDIUM
+      size: Sizes.MEDIUM,
+      lockAxis: 0
     }
   },
   computed: {
@@ -148,12 +149,18 @@ export default {
     boundMouseDown(e) {
       e.preventDefault();
       this.mouseDown = true;
-      this.lastCoord = [e.clientX, e.clientY];
       // let adjacent = this.lastCoord.map(c => c - 1);
       this.addHistory();
       this.ctx.beginPath();
+      if (e.shiftKey) {
+        this.move(this.lastCoord);
+        this.stroke([e.clientX, e.clientY]);
+      }
+      this.lastCoord = [e.clientX, e.clientY];
+
       this.circle(this.lastCoord);
       this.move(this.lastCoord);
+      
     },
     mouseUp(e) {
       e.preventDefault();
@@ -162,6 +169,7 @@ export default {
         this.ctx.moveTo(...this.lastCoord);
         this.circle(this.lastCoord);
         this.ctx.closePath();
+        this.lockAxis = 0;
         this.$store.commit('save/savePageState', this.history);
         // console.log(this.history);
       }
@@ -169,8 +177,21 @@ export default {
     mouseMove(e) {
       e.preventDefault();
       if (this.mouseDown) {
+        let newCoord  = [e.clientX, e.clientY];
+        if (e.shiftKey) {
+          if (this.lockAxis === 0) {
+            let xDiff = Math.abs(this.lastCoord[0] - newCoord[0]);
+            let yDiff = Math.abs(this.lastCoord[1] - newCoord[1]);
+            this.lockAxis = xDiff > yDiff ? 1 : 2;
+          }
+          if (this.lockAxis === 1) {
+            newCoord[1] = this.lastCoord[1];
+          } else if (this.lockAxis === 2) {
+            newCoord[0] = this.lastCoord[0];
+          }
+        } else if (this.lockAxis !== 0) this.lockAxis = 0;
+          
         // console.log('mouse moving', e);
-        const newCoord = [e.clientX, e.clientY];
         // this.stroke(this.lastCoord, newCoord);
         this.stroke(newCoord);
         this.lastCoord = newCoord;
