@@ -6,7 +6,7 @@ class Drawer {
     this.canvas.height = this.canvas.scrollHeight;
     this.canvas.width = this.canvas.scrollWidth;
 
-    this.ctx = canvas.getContext("2d");
+    this.ctx = this.canvas.getContext("2d");
     this.ctx.scale(SCALE, SCALE);
     this.setColor('red');
     this.ctx.lineWidth = 1;
