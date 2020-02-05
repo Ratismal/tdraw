@@ -1,0 +1,12 @@
+{
+  "name": "tdraw",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^8.0.0"
+  },
+  "scripts": {
+    "start": "electron ."
+  }
+}
